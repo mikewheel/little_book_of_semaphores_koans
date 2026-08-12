@@ -28,6 +28,7 @@ class Signaling {
     }
 
   private:
-    // TODO: your semaphore(s) here. Reminder: the initial value goes in the
-    // constructor argument, e.g.  std::counting_semaphore<> a1_done{0};
+    // TODO: your semaphore(s) here. Syntax reminder: the initial value goes
+    // in the constructor argument, e.g.  std::counting_semaphore<> sem{N};
+    // — choosing N wisely is the koan.
 };
