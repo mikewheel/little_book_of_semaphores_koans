@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+# One-command test runner for the semaphore koans.
+#
+#   ./check                  run every koan in both languages
+#   ./check python           run every Python koan
+#   ./check cpp              run every C++ koan
+#   ./check 05               run koan 05 in both languages
+#   ./check python 05        run koan 05 in Python only
+#   ./check cpp barrier      run every C++ koan whose name contains "barrier"
+#
+# The first run builds the Docker images, which takes a few minutes;
+# after that everything is cached and a single koan runs in seconds.
+set -uo pipefail
+cd "$(dirname "$0")"
+
+lang="all"
+pattern=""
+for arg in "$@"; do
+  case "$arg" in
+    python|py) lang="python" ;;
+    cpp|c++)   lang="cpp" ;;
+    *)         pattern="$arg" ;;
+  esac
+done
+
+run_python() {
+  local args=()
+  if [[ -n "$pattern" ]]; then
+    local dirs=()
+    for d in python/koans/*"$pattern"*/; do
+      [[ -d "$d" ]] && dirs+=("${d#python/}")
+    done
+    if [[ ${#dirs[@]} -eq 0 ]]; then
+      echo "check: no Python koan matches '$pattern'" >&2
+      return 2
+    fi
+    args=("${dirs[@]}")
+  fi
+  docker compose run --rm python "${args[@]}"
+}
+
+run_cpp() {
+  docker compose run --rm cpp ${pattern:+"$pattern"}
+}
+
+status=0
+if [[ "$lang" == "all" || "$lang" == "python" ]]; then
+  echo "══════════════════════════ Python ══════════════════════════"
+  run_python || status=1
+fi
+if [[ "$lang" == "all" || "$lang" == "cpp" ]]; then
+  echo "═══════════════════════════ C++ ═════════════════════════════"
+  run_cpp || status=1
+fi
+exit $status

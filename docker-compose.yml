@@ -1,0 +1,18 @@
+services:
+  python:
+    build: ./python
+    volumes:
+      - ./python:/work
+    init: true
+
+  cpp:
+    build: ./cpp
+    volumes:
+      - ./cpp:/work
+      - cpp-build:/build
+    environment:
+      - BUILD_DIR
+    init: true
+
+volumes:
+  cpp-build:
