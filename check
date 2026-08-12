@@ -36,7 +36,7 @@ run_python() {
     fi
     args=("${dirs[@]}")
   fi
-  docker compose run --rm python "${args[@]}"
+  docker compose run --rm python ${args[@]+"${args[@]}"}
 }
 
 run_cpp() {

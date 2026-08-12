@@ -119,6 +119,19 @@ inline void jitter(int max_ms = 2) {
 // A thread-safe, ordered record of named events.
 class EventLog {
   public:
+    EventLog() = default;
+    // Copyable so helpers can return a finished log by value (the mutex and
+    // condition variable themselves are not copied).
+    EventLog(const EventLog& other) : events_(other.events()) {}
+    EventLog& operator=(const EventLog& other) {
+        if (this != &other) {
+            auto evs = other.events();
+            std::lock_guard lock(mutex_);
+            events_ = std::move(evs);
+        }
+        return *this;
+    }
+
     void record(const std::string& label) {
         std::lock_guard lock(mutex_);
         events_.push_back(label);
