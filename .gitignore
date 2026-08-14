@@ -1,3 +1,5 @@
+LittleBookOfSemaphores.pdf
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]
@@ -216,3 +218,45 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# C++ / CMake
+#   The koan build normally runs inside Docker and writes to the cpp-build
+#   volume, so nothing lands here. These cover host-side builds: the VS Code
+#   CMake extension, clangd setup, or a quick g++ of a scratch file.
+#   (build/, lib/, lib64/, *.so and .cache are already ignored above.)
+*.o
+*.obj
+*.a
+*.dylib
+*.dll
+*.exe
+a.out
+*.dSYM/
+
+#   CMake/CTest/Ninja output, if ever generated in-source
+CMakeCache.txt
+CMakeFiles/
+CMakeUserPresets.json
+cmake_install.cmake
+CTestTestfile.cmake
+Testing/
+_deps/
+compile_commands.json
+build.ninja
+rules.ninja
+.ninja_deps
+.ninja_log
+
+#   Crash dumps and instrumentation output
+#   (a segfaulting test in the container can drop a core file into /work)
+core
+core.*
+vgcore.*
+*.gcda
+*.gcno
+*.gcov
+*.profraw
+*.profdata
+
+# macOS
+.DS_Store
